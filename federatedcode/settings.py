@@ -6,7 +6,7 @@
 # See https://github.com/nexB/federatedcode for support or download.
 # See https://aboutcode.org for more information about AboutCode.org OSS projects.
 #
-import os
+
 import sys
 from pathlib import Path
 
@@ -30,8 +30,7 @@ environ.Env.read_env(ENV_FILE)
 SECRET_KEY = env.str("SECRET_KEY")
 
 ALLOWED_HOSTS = env.list(
-    "ALLOWED_HOSTS",
-    default=[".localhost", "127.0.0.1", "[::1]", "host.docker.internal"],
+    "ALLOWED_HOSTS", default=[".localhost", "127.0.0.1", "[::1]", "host.docker.internal"]
 )
 
 CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=[])
