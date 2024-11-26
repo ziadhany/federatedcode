@@ -54,10 +54,10 @@ class Importer:
             if diff.a_path.startswith("."):
                 continue
 
-            yaml_data_a_blob = (
+            yaml_data_a_blob = dict(
                 saneyaml.load(diff.a_blob.data_stream.read()) if diff.a_blob else None
             )
-            yaml_data_b_blob = (
+            yaml_data_b_blob = dict(
                 saneyaml.load(diff.b_blob.data_stream.read()) if diff.b_blob else None
             )
 
@@ -113,7 +113,7 @@ def vul_handler(change_type, repo_obj, yaml_data_a_blob, yaml_data_b_blob, a_pat
 
 def pkg_handler(change_type, default_service, yaml_data_a_blob, yaml_data_b_blob):
     if change_type == "A":
-        package = yaml_data_b_blob.get("package")
+        package = yaml_data_b_blob.get("pacakge")
 
         pkg, _ = Package.objects.get_or_create(purl=package, service=default_service)
 
