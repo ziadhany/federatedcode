@@ -38,13 +38,16 @@ Visit http://127.0.0.1:8000/create-repo
 
 Step 4:
 --------
-To initiate a sync of the master branch, you can either click on the sync request button in the app or send an HTTP request directly to the endpoint using the auth service.
+To initiate a sync of the master branch, you can either click on the sync request
+button in the app or send an HTTP request directly to the endpoint using the auth service.
 The endpoint is: `repository/<uuid:repository_id>/sync-repo/`
 
 Visit http://127.0.0.1:8000/repo-list.
 
 
-Alternatively, you can integrate this action with GitHub Actions or any other CI tool to trigger the sync automatically whenever new data is pushed to the master branch.
+Alternatively, you can integrate this action with GitHub Actions or any other
+CI tool to trigger the sync automatically whenever new data is pushed to the
+master branch.
 
 Here’s an example of how to send the request manually using curl:
 ex:
@@ -56,7 +59,8 @@ ex:
     http://127.0.0.1:8000/repository/<uuid:repository_id>/sync-repo/
 
 
-**Note:** You can retrieve the service token after authenticating via the endpoint `api/v0/users/@<str:username>`.
+**Note:** You can retrieve the service token after authenticating via the endpoint
+`api/v0/users/@<str:username>`.
 
 Step 5:
 --------
