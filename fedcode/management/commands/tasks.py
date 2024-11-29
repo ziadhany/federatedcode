@@ -6,6 +6,8 @@
 # See https://github.com/nexB/federatedcode for support or download.
 # See https://aboutcode.org for more information about AboutCode.org OSS projects.
 #
+from traceback import format_exc as traceback_format_exc
+
 from django.core.management.base import BaseCommand
 from django.core.management.base import CommandError
 
@@ -29,7 +31,9 @@ def sync_task():
                 importer.run()
                 sync_r.done = True
             except Exception as e:
-                sync_r.error_message = e
+                sync_r.error_message = (
+                    f"Failed to sync {sync_r.repo!r} {e!r} \n {traceback_format_exc()}"
+                )
             finally:
                 sync_r.save()
 
