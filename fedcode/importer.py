@@ -6,6 +6,7 @@
 # See https://github.com/nexB/federatedcode for support or download.
 # See https://aboutcode.org for more information about AboutCode.org OSS projects.
 #
+
 import logging
 import os.path
 from dataclasses import dataclass
@@ -14,14 +15,13 @@ from itertools import zip_longest
 import saneyaml
 
 from fedcode.activitypub import Activity
-from fedcode.activitypub import CreateActivity
-from fedcode.activitypub import DeleteActivity
 from fedcode.activitypub import UpdateActivity
 from fedcode.models import Note
 from fedcode.models import Package
 from fedcode.models import Repository
 from fedcode.models import Service
 from fedcode.models import Vulnerability
+from fedcode.pipes import utils
 
 logger = logging.getLogger(__name__)
 
@@ -33,7 +33,7 @@ class Importer:
 
     def run(self):
         repo = self.repo_obj.git_repo_obj
-        latest_commit_hash = repo.heads.master.commit.hexsha
+        latest_commit_hash = repo.head.commit.hexsha
         latest_commit = repo.commit(latest_commit_hash)
         if self.repo_obj.last_imported_commit:
             last_imported_commit = repo.commit(self.repo_obj.last_imported_commit)
@@ -43,12 +43,12 @@ class Importer:
             # Diff between empty trees and last_imported_commit
             diffs = latest_commit.diff("4b825dc642cb6eb9a060e54bf8d69288fbee4904", R=True)
 
-        if repo.heads.master.commit.hexsha == self.repo_obj.last_imported_commit:
+        if repo.head.commit.hexsha == self.repo_obj.last_imported_commit:
             logger.error("Nothing to import!")
             return
 
         for diff in diffs:
-            if not diff.a_path.endswith(".yml"):
+            if not diff.a_path.endswith(".yaml"):
                 continue
 
             if diff.a_path.startswith("."):
@@ -118,7 +118,7 @@ def pkg_handler(change_type, default_service, yaml_data_a_blob, yaml_data_b_blob
         pkg, _ = Package.objects.get_or_create(purl=package, service=default_service)
 
         for version in yaml_data_b_blob.get("versions", []):
-            create_note(pkg, version)
+            utils.create_note(pkg, version)
 
     elif change_type == "M":
         old_package = yaml_data_a_blob.get("package")
@@ -132,10 +132,10 @@ def pkg_handler(change_type, default_service, yaml_data_a_blob, yaml_data_b_blob
             yaml_data_a_blob.get("versions", []), yaml_data_b_blob.get("versions", [])
         ):
             if version_b and not version_a:
-                create_note(pkg, version_b)
+                utils.create_note(pkg, version_b)
 
             if version_a and not version_b:
-                delete_note(pkg, version_a)
+                utils.delete_note(pkg, version_a)
 
             if version_a and version_b:
                 note = Note.objects.get(acct=pkg.acct, content=saneyaml.dump(version_a))
@@ -156,30 +156,5 @@ def pkg_handler(change_type, default_service, yaml_data_a_blob, yaml_data_b_blob
         package = yaml_data_a_blob.get("package")
         pkg = Package.objects.get(purl=package, service=default_service)
         for version in yaml_data_a_blob.get("versions", []):
-            delete_note(pkg, version)
+            utils.delete_note(pkg, version)
         pkg.delete()
-
-
-def create_note(pkg, version):
-    note, _ = Note.objects.get_or_create(acct=pkg.acct, content=saneyaml.dump(version))
-    pkg.notes.add(note)
-    create_activity = CreateActivity(actor=pkg.to_ap, object=note.to_ap)
-    Activity.federate(
-        targets=pkg.followers_inboxes,
-        body=create_activity.to_ap(),
-        key_id=pkg.key_id,
-    )
-
-
-def delete_note(pkg, version):
-    note = Note.objects.get(acct=pkg.acct, content=saneyaml.dump(version))
-    note_ap = note.to_ap
-    note.delete()
-    pkg.notes.remove(note)
-
-    deleted_activity = DeleteActivity(actor=pkg.to_ap, object=note_ap)
-    Activity.federate(
-        targets=pkg.followers_inboxes,
-        body=deleted_activity.to_ap,
-        key_id=pkg.key_id,
-    )
