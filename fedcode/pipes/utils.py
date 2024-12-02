@@ -45,7 +45,10 @@ def package_metadata_path_to_purl(path, version=True):
     """
     Return PURL from relative metadata path.
 
-
+    >>> from pathlib import Path
+    >>> path=Path("npm/@angular/animation/3.0.1/scancodeio.json")
+    >>> purl=package_metadata_path_to_purl(path)
+    >>> assert "pkg:npm/%40angular/animation@3.0.1" == str(purl)
     """
     parts = path.parts
     if len(parts) < 4:
