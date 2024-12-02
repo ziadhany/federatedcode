@@ -100,7 +100,7 @@ def sync_vulnerabilities(repository, logger):
             yaml_data_a_blob,
             yaml_data_b_blob,
         )
-        break
+
     repository.last_imported_commit = latest_commit_hash
     repository.save()
     logger("The Importer run successfully")
