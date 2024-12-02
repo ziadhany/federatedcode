@@ -39,8 +39,7 @@ class SyncScanCodeScans(FederatedCodePipeline):
 
         synced_package_scan_count = 0
         progress = LoopProgress(total_iterations=repositories_count, logger=self.log)
-        for repo in progress.iter(self.git_repos.iterator(chunk_size=2000)):
-            repository, _ = Repository.objects.get_or_create(url=repo)
+        for repository in progress.iter(self.git_repos.iterator(chunk_size=2000)):
             repository.git_repo_obj.remotes.origin.pull()
             synced_package_scan_count += sync_scancodeio_scan(
                 repository=repository,
