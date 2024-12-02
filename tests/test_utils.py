@@ -74,9 +74,12 @@ def test_full_reverse():
 
 
 def test_full_resolve():
-    result_args, result_url_name = full_resolve(f"https://127.0.0.1:8000/notes/7e676ad1-995d-405c-a829-cb39813c74e5")
-    assert "7e676ad1-995d-405c-a829-cb39813c74e5" == str(result_args['uuid'])
+    result_args, result_url_name = full_resolve(
+        f"https://127.0.0.1:8000/notes/7e676ad1-995d-405c-a829-cb39813c74e5"
+    )
+    assert "7e676ad1-995d-405c-a829-cb39813c74e5" == str(result_args["uuid"])
     assert "note-page" == result_url_name
+
 
 def test_check_purl_actor():
     assert check_purl_actor("pkg:maven/org.apache.logging")
