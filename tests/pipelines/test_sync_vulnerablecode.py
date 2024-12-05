@@ -10,12 +10,12 @@ import pytest
 from django.contrib.auth.models import User
 from fedcode_test_utils import mute_post_save_signal  # NOQA
 
-from fedcode.importer import Importer
 from fedcode.models import Note
 from fedcode.models import Package
 from fedcode.models import Repository
 from fedcode.models import Service
 from fedcode.models import Vulnerability
+from fedcode.pipelines.sync_vulnerablecode import SyncVulnerableCode
 
 
 @pytest.fixture
@@ -45,8 +45,8 @@ def repo(db, service, mute_post_save_signal):
 def test_simple_importer(service, repo, mute_post_save_signal):
     # just add all packages and vulnerabilities
     repo.path = "/home/ziad/vul-sample/repo1"
-    importer = Importer(repo, service)
-    importer.run()
+    importer = SyncVulnerableCode()
+    importer.execute()
 
     assert Note.objects.count() > 1
     assert Vulnerability.objects.count() > 1
@@ -59,8 +59,8 @@ def test_simple_importer(service, repo, mute_post_save_signal):
     last_imported_commit = repo.last_imported_commit
 
     # Run importer again without add any new data
-    importer = Importer(repo, service)
-    importer.run()
+    importer = SyncVulnerableCode()
+    importer.execute()
 
     assert note_n == Note.objects.count()
     assert vul_n == Vulnerability.objects.count()
@@ -70,8 +70,8 @@ def test_simple_importer(service, repo, mute_post_save_signal):
     # Edit last_imported_commit
     repo.last_imported_commit = "c8de84af0a7c11bf151e96142ce711824648ec41"
     repo.save()
-    importer = Importer(repo, service)
-    importer.run()
+    importer = SyncVulnerableCode()
+    importer.execute()
 
 
 @pytest.mark.skip(reason="Need a real git repo to test the importer")
@@ -79,8 +79,8 @@ def test_simple_importer(service, repo, mute_post_save_signal):
 def test_complex_importer(service, repo, mute_post_save_signal):
     # repo with 1 commit
     repo.path = "/home/ziad/vul-sample/repo1"
-    importer = Importer(repo, service)
-    importer.run()
+    importer = SyncVulnerableCode()
+    importer.execute()
 
     assert Note.objects.count() > 1
     assert Vulnerability.objects.count() > 1
@@ -95,8 +95,8 @@ def test_complex_importer(service, repo, mute_post_save_signal):
     # Run importer again without add any new data
     # the same repo with 2 commit ( after pull )
     repo.path = "/home/ziad/vul-sample/repo2"
-    importer = Importer(repo, service)
-    importer.run()
+    importer = SyncVulnerableCode()
+    importer.execute()
 
     assert note_n > Note.objects.count()
     assert vul_n > Vulnerability.objects.count()
@@ -105,5 +105,5 @@ def test_complex_importer(service, repo, mute_post_save_signal):
     # Edit last_imported_commit
     repo.last_imported_commit = "9c3ccee39baef6017d9152367402de9909eadd72"
     repo.save()
-    importer = Importer(repo, service)
-    importer.run()
+    importer = SyncVulnerableCode()
+    importer.execute()

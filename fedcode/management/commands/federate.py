@@ -6,32 +6,14 @@
 # See https://github.com/nexB/federatedcode for support or download.
 # See https://aboutcode.org for more information about AboutCode.org OSS projects.
 #
-from django.core.management.base import BaseCommand
-from django.core.management.base import CommandError
 
-from fedcode.importer import Importer
+from traceback import format_exc as traceback_format_exc
+
+from django.core.management.base import BaseCommand
+
 from fedcode.models import FederateRequest
-from fedcode.models import SyncRequest
 from fedcode.signatures import FEDERATEDCODE_PRIVATE_KEY
 from fedcode.signatures import HttpSignature
-
-
-def sync_task():
-    """
-    sync_task is a task to run the Importer and save the status
-    """
-    for sync_r in SyncRequest.objects.all().order_by("created_at"):
-        if not sync_r.done:
-            try:
-                repo = sync_r.repo
-                repo.git_repo_obj.remotes.origin.pull()
-                importer = Importer(repo, repo.admin)
-                importer.run()
-                sync_r.done = True
-            except Exception as e:
-                sync_r.error_message = e
-            finally:
-                sync_r.save()
 
 
 def send_fed_req_task():
@@ -53,11 +35,5 @@ def send_fed_req_task():
 
 
 class Command(BaseCommand):
-    def add_arguments(self, parser):
-        parser.add_argument("task", choices=["sync", "federate"])
-
     def handle(self, *args, **options):
-        if options["task"] == "sync":
-            sync_task()
-        elif options["task"] == "federate":
-            send_fed_req_task()
+        send_fed_req_task()

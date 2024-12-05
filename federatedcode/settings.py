@@ -38,7 +38,6 @@ CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=[])
 # SECURITY WARNING: don't run with debug turned on in production
 DEBUG = env.bool("FEDERATEDCODE_DEBUG", default=False)
 
-
 ############################################
 # Federation settings
 AP_CONTENT_TYPE = "application/activity+json"
@@ -200,11 +199,6 @@ LOGGING = {
         },
     },
     "loggers": {
-        "scanpipe": {
-            "handlers": ["null"] if IS_TESTS else ["console"],
-            "level": FEDERATEDCODE_LOG_LEVEL,
-            "propagate": False,
-        },
         "django": {
             "handlers": ["null"] if IS_TESTS else ["console"],
             "propagate": False,
@@ -212,6 +206,11 @@ LOGGING = {
         # Set FEDERATEDCODE_LOG_LEVEL=DEBUG to display all SQL queries in the console.
         "django.db.backends": {
             "level": FEDERATEDCODE_LOG_LEVEL,
+        },
+        "fedcode.pipelines": {
+            "handlers": ["null"] if IS_TESTS else ["console"],
+            "level": FEDERATEDCODE_LOG_LEVEL,
+            "propagate": False,
         },
     },
 }
