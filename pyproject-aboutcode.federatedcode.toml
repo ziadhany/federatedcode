@@ -42,6 +42,8 @@ dependencies = [
 
 urls = { Homepage = "https://github.com/aboutcode-org/federatedcode" }
 
+[project.scripts]
+    federatedcode = "aboutcode.federatedcode.cli:handler"
 
 [tool.bumpversion]
 current_version = "0.1.0"
