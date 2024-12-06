@@ -9,17 +9,20 @@
 #
 
 import click
+
 from aboutcode.federatedcode.client import get_package_scan
 
+
 @click.command()
-@click.argument('purl')
+@click.argument("purl")
 def handler(purl):
     """
     Get package scan for PURL from FederatedCode git repository.
-    
+
     PURL: PURL to fetch scan result
     """
     click.echo(get_package_scan(purl=purl))
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     handler()

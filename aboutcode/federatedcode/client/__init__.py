@@ -18,7 +18,10 @@ from packageurl import PackageURL
 
 load_dotenv()
 
-FEDERATEDCODE_GIT_RAW_URL = os.getenv("FEDERATEDCODE_GIT_RAW_URL", "https://raw.githubusercontent.com/aboutcode-org/")
+FEDERATEDCODE_GIT_RAW_URL = os.getenv(
+    "FEDERATEDCODE_GIT_RAW_URL",
+    "https://raw.githubusercontent.com/aboutcode-org/",
+)
 
 
 class ScanNotAvailableError(Exception):
