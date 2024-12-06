@@ -38,10 +38,14 @@ dependencies = [
     "packageurl_python >= 0.15.6",
     "aboutcode.hashid>=0.1.0",
     "python-dotenv>=1.0.1",
+    "click>=8.1.7",
+    "requests>=2.32.3",
 ]
 
 urls = { Homepage = "https://github.com/aboutcode-org/federatedcode" }
 
+[project.scripts]
+    federatedcode = "aboutcode.federatedcode.cli:handler"
 
 [tool.bumpversion]
 current_version = "0.1.0"

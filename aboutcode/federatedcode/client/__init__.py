@@ -18,7 +18,10 @@ from packageurl import PackageURL
 
 load_dotenv()
 
-FEDERATEDCODE_GITHUB_ACCOUNT_NAME = os.getenv("FEDERATEDCODE_GITHUB_ACCOUNT_NAME")
+FEDERATEDCODE_GIT_RAW_URL = os.getenv(
+    "FEDERATEDCODE_GIT_RAW_URL",
+    "https://raw.githubusercontent.com/aboutcode-org/",
+)
 
 
 class ScanNotAvailableError(Exception):
@@ -28,8 +31,8 @@ class ScanNotAvailableError(Exception):
 def get_package_scan(purl: Union[PackageURL, str]):
     """Return the package scan result for a PURL from the FederatedCode Git repository."""
 
-    if not FEDERATEDCODE_GITHUB_ACCOUNT_NAME:
-        raise ValueError("Provide ``FEDERATEDCODE_GITHUB_ACCOUNT_NAME`` in .env file.")
+    if not FEDERATEDCODE_GIT_RAW_URL:
+        raise ValueError("Provide ``FEDERATEDCODE_GIT_RAW_URL`` in .env file.")
 
     if isinstance(purl, str):
         purl = PackageURL.from_string(purl)
@@ -45,9 +48,9 @@ def get_package_scan(purl: Union[PackageURL, str]):
     version = purl.version
     file_name = "scancodeio.json"
 
-    url_parts = [FEDERATEDCODE_GITHUB_ACCOUNT_NAME, repo_name, package_dir_path, version, file_name]
+    url_parts = [repo_name, package_dir_path, version, file_name]
 
-    file_url = urljoin("https://raw.githubusercontent.com", "/".join(url_parts))
+    file_url = urljoin(FEDERATEDCODE_GIT_RAW_URL, "/".join(url_parts))
 
     try:
         response = requests.get(file_url)
