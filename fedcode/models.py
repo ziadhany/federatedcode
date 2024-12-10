@@ -233,7 +233,7 @@ class Note(models.Model):
             "type": "Note",
             "author": self.acct,
             "content": self.content,
-            "update_date": self.updated_at,
+            "update_date": str(self.updated_at),
         }
 
 

@@ -209,12 +209,14 @@ def test_get_user_inbox(person, vulnerability, review, package):
                     "type": "Note",
                     "author": "pkg:maven/org.apache.logging@127.0.0.1:8000",
                     "content": "yaml data1",
+                    "update_date": str(note1.updated_at),
                 },
                 {
                     "id": f"https://127.0.0.1:8000/notes/{note2.id}",
                     "type": "Note",
                     "author": "pkg:maven/org.apache.logging@127.0.0.1:8000",
                     "content": "yaml data2",
+                    "update_date": str(note2.updated_at),
                 },
             ],
         },
@@ -282,6 +284,7 @@ def test_get_user_outbox(person, vulnerability, review, note):
                     "content": note.content,
                     "id": f"https://127.0.0.1:8000/notes/{note.id}",
                     "type": "Note",
+                    "update_date": str(note.updated_at),
                 }
             ],
         },
@@ -383,6 +386,7 @@ def test_get_package_inbox(package, service):
                     "[] fixing_vulnerabilities: []",
                     "id": f"https://127.0.0.1:8000/notes/{note1.id}",
                     "type": "Note",
+                    "update_date": str(note1.updated_at),
                 }
             ],
             "totalItems": 1,
@@ -413,6 +417,7 @@ def test_get_package_outbox(service, package):
                     "content": "yaml data1",
                     "id": f"https://127.0.0.1:8000/notes/{note1.id}",
                     "type": "Note",
+                    "update_date": str(note1.updated_at),
                 }
             ],
             "totalItems": 1,
