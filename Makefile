@@ -92,7 +92,7 @@ migrate:
 
 test:
 	@echo "-> Run the test suite"
-	@${ACTIVATE} pytest -vvs
+	@${ACTIVATE} pytest -vvs tests/ fedcode/ federatedcode/ aboutcode/
 
 docs:
 	rm -rf docs/_build/
