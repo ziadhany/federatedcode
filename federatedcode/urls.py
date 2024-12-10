@@ -6,8 +6,8 @@
 # See https://github.com/nexB/federatedcode for support or download.
 # See https://aboutcode.org for more information about AboutCode.org OSS projects.
 #
+
 from django.conf import settings
-from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include
 from django.urls import path
@@ -28,6 +28,7 @@ from fedcode.views import PackageView
 from fedcode.views import PersonSignUp
 from fedcode.views import PersonUpdateView
 from fedcode.views import PersonView
+from fedcode.views import RemoteUserSubscribe
 from fedcode.views import RepositoryListView
 from fedcode.views import ReviewListView
 from fedcode.views import ReviewView
@@ -92,6 +93,11 @@ urlpatterns = [
     path("api/v0/users/@<str:username>/inbox", UserInbox.as_view(), name="user-inbox"),
     path("api/v0/users/@<str:username>/outbox", UserOutbox.as_view(), name="user-outbox"),
     path("api/v0/purls/@<path:purl_string>/inbox", PackageInbox.as_view(), name="purl-inbox"),
+    path(
+        "api/v0/users/@<str:username>/subscribe",
+        RemoteUserSubscribe.as_view(),
+        name="purl-subscribe",
+    ),
     path(
         "api/v0/purls/@<path:purl_string>/outbox",
         PackageOutbox.as_view(),

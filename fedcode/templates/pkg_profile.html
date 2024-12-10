@@ -82,8 +82,12 @@ Your Profile
                   <figure class="image is-64x64 mb-5 mr-5 ml-5 mt-5">
                        <img class="is-rounded" src="{{ follower.person.avatar.url }}" alt="{{ follower.person.user.username }} profile image">
                        <p class="is-size-5 has-text-centered">
-                            <a href="{% url 'user-profile' follower.person.user.username %}">@{{ follower.person.user.username }}</a>
-                       </p>
+                        {% if follower.person.local %}
+                          <a href="{% url 'user-profile' follower.person.user.username %}">@{{ follower.person.user.username }}</a>
+                        {% else %}
+                          <a href="{% url 'user-profile' follower.person.remote_actor.username %}">@{{ follower.person.remote_actor.username }}</a>
+                        {% endif %}
+                        </p>
                   </figure>
           </div>
         {% endfor %}

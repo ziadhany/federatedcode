@@ -10,6 +10,7 @@ import difflib
 import json
 import logging
 import os.path
+from urllib.parse import urlparse
 
 import requests
 from django.contrib import messages
@@ -59,6 +60,7 @@ from fedcode.models import Follow
 from fedcode.models import Note
 from fedcode.models import Package
 from fedcode.models import Person
+from fedcode.models import RemoteActor
 from fedcode.models import Repository
 from fedcode.models import Reputation
 from fedcode.models import Review
@@ -697,6 +699,24 @@ class UserOutbox(View):
 
 
 @method_decorator(has_valid_header, name="dispatch")
+class RemoteUserSubscribe(View):
+    def get(self, request, *args, **kwargs):
+        """Endpoint to for existing remote user to subscribe to package."""
+        purl = request.GET.get("purl").rstrip("/")
+        package = get_object_or_404(Package, purl=purl)
+        remote_actor = get_object_or_404(RemoteActor, username=kwargs["username"])
+        host = request.get_host()
+        if urlparse(remote_actor.url).netloc == host:
+            _, created = Follow.objects.get_or_create(package=package, person=remote_actor.person)
+            message = f"Already subscribed package {purl}"
+            if created:
+                message = f"Successfully subscribed package {purl}"
+
+            return JsonResponse({"status": "success", "message": message})
+        return HttpResponseBadRequest()
+
+
+@method_decorator(has_valid_header, name="dispatch")
 class PackageInbox(View):
     def get(self, request, *args, **kwargs):
         """
@@ -736,7 +756,7 @@ class PackageOutbox(View):
         (or at least the ones you're authorized to see).
         (client-to-server and/or server-to-server)"""
 
-        actor = Package.objects.get(purl=kwargs["purl_string"])
+        actor = get_object_or_404(Package, purl=kwargs["purl_string"])
         return JsonResponse(
             {"notes": ap_collection(actor.notes)},
             content_type=AP_CONTENT_TYPE,
