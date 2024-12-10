@@ -158,6 +158,7 @@ def test_objects_to_ap(repo, review, vulnerability, note, rep, mute_post_save_si
         "id": f"https://127.0.0.1:8000/notes/{note.id}",
         "author": note.acct,
         "content": note.content,
+        "update_date": str(note.updated_at),
     }
 
     assert rep.to_ap == {
@@ -168,5 +169,6 @@ def test_objects_to_ap(repo, review, vulnerability, note, rep, mute_post_save_si
             "id": f"https://127.0.0.1:8000/notes/{note.id}",
             "author": note.acct,
             "content": note.content,
+            "update_date": str(note.updated_at),
         },
     }

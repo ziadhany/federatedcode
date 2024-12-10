@@ -52,11 +52,11 @@ envfile:
 
 isort:
 	@echo "-> Apply isort changes to ensure proper imports ordering"
-	@${ACTIVATE} isort --profile black .
+	@${ACTIVATE} isort --profile black aboutcode/ fedcode/ federatedcode/ tests/
 
 black:
 	@echo "-> Apply black code formatter"
-	@${ACTIVATE} black ${BLACK_ARGS} .
+	@${ACTIVATE} black ${BLACK_ARGS} aboutcode/ fedcode/ federatedcode/ tests/
 
 doc8:
 	@echo "-> Run doc8 validation"
@@ -92,7 +92,7 @@ migrate:
 
 test:
 	@echo "-> Run the test suite"
-	@${ACTIVATE} pytest -vvs
+	@${ACTIVATE} pytest -vvs tests/ fedcode/ federatedcode/ aboutcode/
 
 docs:
 	rm -rf docs/_build/

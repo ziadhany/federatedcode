@@ -64,10 +64,6 @@ class Actor(models.Model):
         blank=False,
     )
 
-    local = models.BooleanField(
-        default=True,
-    )
-
     class Meta:
         abstract = True
 
@@ -237,6 +233,7 @@ class Note(models.Model):
             "type": "Note",
             "author": self.acct,
             "content": self.content,
+            "update_date": str(self.updated_at),
         }
 
 
@@ -365,6 +362,7 @@ class Person(Actor):
     user = models.OneToOneField(
         User,
         null=True,
+        blank=True,
         on_delete=models.CASCADE,
     )
 
@@ -380,6 +378,21 @@ class Person(Actor):
         blank=True,
         help_text="Notes created by this user",
     )
+
+    class Meta:
+        constraints = [
+            models.CheckConstraint(
+                check=(
+                    models.Q(user__isnull=False, remote_actor__isnull=True)
+                    | models.Q(user__isnull=True, remote_actor__isnull=False)
+                ),
+                name="either_local_or_remote",
+            ),
+        ]
+
+    @property
+    def local(self):
+        return bool(self.user)
 
     @property
     def avatar_absolute_url(self):
@@ -410,6 +423,8 @@ class Person(Actor):
 
     @property
     def inbox_url(self):
+        if not self.local:
+            return self.remote_actor.url
         return full_reverse("user-inbox", self.user.username)
 
     @property
@@ -477,7 +492,10 @@ class Follow(models.Model):
         ordering = ["-updated_at"]
 
     def __str__(self):
-        return f"{self.person.user.username} - {self.package.purl}"
+        username = self.person.remote_actor.username
+        if self.person.local:
+            username = self.person.user.username
+        return f"{username} - {self.package.purl}"
 
 
 class Repository(models.Model):
