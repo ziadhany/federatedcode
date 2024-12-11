@@ -94,7 +94,7 @@ urlpatterns = [
     path("api/v0/users/@<str:username>/outbox", UserOutbox.as_view(), name="user-outbox"),
     path("api/v0/purls/@<path:purl_string>/inbox", PackageInbox.as_view(), name="purl-inbox"),
     path(
-        "api/v0/users/@<str:username>/subscribe",
+        "api/v0/users/@<str:username>/subscribe/",
         RemoteUserSubscribe.as_view(),
         name="purl-subscribe",
     ),
