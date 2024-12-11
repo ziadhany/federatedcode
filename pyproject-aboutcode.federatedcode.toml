@@ -35,11 +35,13 @@ classifiers = [
 ]
 
 dependencies = [
-    "packageurl_python >= 0.15.6",
     "aboutcode.hashid>=0.2.0",
-    "python-dotenv>=1.0.1",
     "click>=8.1.7",
+    "Django>=5.1.2",
+    "packageurl_python >= 0.15.6",
+    "python-dotenv>=1.0.1",
     "requests>=2.32.3",
+    "saneyaml>=0.6.0",
 ]
 
 urls = { Homepage = "https://github.com/aboutcode-org/federatedcode" }
