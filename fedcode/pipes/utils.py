@@ -7,6 +7,8 @@
 # See https://aboutcode.org for more information about AboutCode.org OSS projects.
 #
 
+import json
+
 import saneyaml
 from packageurl import PackageURL
 
@@ -22,7 +24,7 @@ def create_note(pkg, note_dict):
     create_activity = CreateActivity(actor=pkg.to_ap, object=note.to_ap)
     Activity.federate(
         targets=pkg.followers_inboxes,
-        body=create_activity.to_ap(),
+        body=json.dumps(create_activity.to_ap()),
         key_id=pkg.key_id,
     )
 
@@ -36,7 +38,7 @@ def delete_note(pkg, note_dict):
     deleted_activity = DeleteActivity(actor=pkg.to_ap, object=note_ap)
     Activity.federate(
         targets=pkg.followers_inboxes,
-        body=deleted_activity.to_ap,
+        body=json.dumps(deleted_activity.to_ap),
         key_id=pkg.key_id,
     )
 
