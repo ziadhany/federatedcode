@@ -7,6 +7,7 @@
 # See https://aboutcode.org for more information about AboutCode.org OSS projects.
 #
 
+import json
 from traceback import format_exc as traceback_format_exc
 
 import requests
@@ -24,9 +25,8 @@ def send_fed_req_task():
         if not rq.done:
             try:
                 headers = {"Content-Type": "application/json"}
-                requests.post(rq.target, json=rq.body, headers=headers)
+                requests.post(rq.target, json=json.loads(rq.body), headers=headers)
                 rq.done = True
-                rq.save()
             except Exception as e:
                 rq.error_message = f"Failed to federate {rq!r} {e!r} \n {traceback_format_exc()}"
             finally:

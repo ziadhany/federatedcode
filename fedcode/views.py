@@ -698,22 +698,19 @@ class UserOutbox(View):
         return HttpResponseBadRequest("Invalid message")
 
 
-@method_decorator(has_valid_header, name="dispatch")
 class RemoteUserSubscribe(View):
     def get(self, request, *args, **kwargs):
-        """Endpoint to for existing remote user to subscribe to package."""
+        """Endpoint for existing remote user to subscribe to package."""
         purl = request.GET.get("purl").rstrip("/")
         package = get_object_or_404(Package, purl=purl)
         remote_actor = get_object_or_404(RemoteActor, username=kwargs["username"])
-        host = request.get_host()
-        if urlparse(remote_actor.url).netloc == host:
-            _, created = Follow.objects.get_or_create(package=package, person=remote_actor.person)
-            message = f"Already subscribed package {purl}"
-            if created:
-                message = f"Successfully subscribed package {purl}"
 
-            return JsonResponse({"status": "success", "message": message})
-        return HttpResponseBadRequest()
+        _, created = Follow.objects.get_or_create(package=package, person=remote_actor.person)
+        message = f"Already subscribed to package {purl}"
+        if created:
+            message = f"Successfully subscribed to package {purl}"
+
+        return JsonResponse({"status": "success", "message": message})
 
 
 @method_decorator(has_valid_header, name="dispatch")

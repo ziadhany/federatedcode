@@ -9,6 +9,7 @@
 
 import os
 from typing import Union
+from urllib.parse import quote
 from urllib.parse import urljoin
 
 import requests
@@ -60,3 +61,10 @@ def get_package_scan(purl: Union[PackageURL, str]):
         if response.status_code == 404:
             raise ScanNotAvailableError(f"No scan available for {purl!s}")
         raise err
+
+
+def subscribe_package(federatedcode_host, remote_username, purl):
+    """Subscribe package for their metadata update from FederatedCode."""
+
+    url_path = f"api/v0/users/@{remote_username}/subscribe/?purl={quote(purl)}"
+    return requests.get(urljoin(federatedcode_host, url_path))
