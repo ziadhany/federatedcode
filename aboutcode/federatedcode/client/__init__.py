@@ -24,6 +24,11 @@ FEDERATEDCODE_GIT_RAW_URL = os.getenv(
     "https://raw.githubusercontent.com/aboutcode-org/",
 )
 
+FEDERATEDCODE_AP_HOST = os.getenv(
+    "FEDERATEDCODE_AP_HOST",
+    "http://localhost:8000/",
+)
+
 
 class ScanNotAvailableError(Exception):
     pass
@@ -68,3 +73,26 @@ def subscribe_package(federatedcode_host, remote_username, purl):
 
     url_path = f"api/v0/users/@{remote_username}/subscribe/?purl={quote(purl)}"
     return requests.get(urljoin(federatedcode_host, url_path))
+
+
+def discover_package_in_ap_server(purl: Union[str, PackageURL]):
+    """Return package profile if PURL exists in AP server."""
+
+    if not FEDERATEDCODE_AP_HOST:
+        raise ValueError("Provide ``FEDERATEDCODE_AP_HOST`` in .env file.")
+
+    if isinstance(purl, str):
+        purl = PackageURL.from_string(purl)
+
+    if purl.version or purl.subpath or purl.qualifiers:
+        purl = PackageURL(
+            type=purl.type,
+            namespace=purl.name,
+            name=purl.name,
+        )
+
+    package = quote(str(purl), safe=":/")
+    url = urljoin(FEDERATEDCODE_AP_HOST, f"/purls/@{package}")
+    response = requests.head(url, allow_redirects=True)
+    if response.status_code == 200:
+        return url
