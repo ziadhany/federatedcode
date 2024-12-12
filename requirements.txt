@@ -84,7 +84,6 @@ snowballstemmer==2.2.0
 sqlparse==0.4.4
 tomli==2.0.1
 tornado==6.4
-twine==4.0.2
 typing_extensions==4.6.3
 tzlocal==5.0.1
 unidiff==0.7.5

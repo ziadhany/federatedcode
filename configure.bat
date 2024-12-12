@@ -27,7 +27,7 @@
 
 @rem # Requirement arguments passed to pip and used by default or with --dev.
 set "REQUIREMENTS=--editable . --requirement requirements.txt"
-set "DEV_REQUIREMENTS=--editable .[testing] --requirement requirements.txt --requirement requirements-dev.txt"
+set "DEV_REQUIREMENTS=--editable .[dev] --requirement requirements.txt --requirement requirements-dev.txt"
 set "DOCS_REQUIREMENTS=--editable .[docs] --requirement requirements.txt"
 
 @rem # where we create a virtualenv
