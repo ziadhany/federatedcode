@@ -13,9 +13,10 @@ from urllib.parse import quote
 from urllib.parse import urljoin
 
 import requests
-from aboutcode.hashid import get_package_base_dir
 from dotenv import load_dotenv
 from packageurl import PackageURL
+
+from aboutcode.hashid import get_package_base_dir
 
 load_dotenv()
 
