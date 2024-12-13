@@ -12,8 +12,8 @@ import os.path
 from itertools import zip_longest
 
 import saneyaml
-from aboutcode.pipeline import LoopProgress
 
+from aboutcode.pipeline import LoopProgress
 from fedcode.activitypub import Activity
 from fedcode.activitypub import UpdateActivity
 from fedcode.models import Note

@@ -11,7 +11,6 @@ from pathlib import Path
 from traceback import format_exc as traceback_format_exc
 
 from aboutcode.pipeline import LoopProgress
-
 from fedcode.models import Package
 from fedcode.models import Repository
 from fedcode.pipelines import FederatedCodePipeline
