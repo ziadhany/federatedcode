@@ -116,4 +116,10 @@ run:
 	@echo "-> Starting development server"
 	${MANAGE} runserver 8000 --insecure
 
-.PHONY: dev envfile isort black doc8 valid bandit check check-deploy clean migrate test docs  postgresdb backupdb run
+check_docs:
+	@echo "Check Sphinx Documentation build minimally"
+	@${ACTIVATE} sphinx-build -E -W docs/source build
+	@echo "Check for documentation style errors"
+	@${ACTIVATE} doc8 --max-line-length 100 docs/source --ignore-path docs/_build/ --ignore D000 --quiet
+
+.PHONY: dev envfile isort black doc8 valid bandit check check-deploy clean migrate test docs  postgresdb backupdb run check_docs

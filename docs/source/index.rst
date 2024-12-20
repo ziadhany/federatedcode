@@ -22,6 +22,13 @@ you will find information on:
 
 .. toctree::
     :maxdepth: 2
+    :caption: Tutorial
+
+    tutorial_getting_started
+    tutorial_remote_subscribe_package_update
+
+.. toctree::
+    :maxdepth: 2
     :caption: Reference Documentation
 
     data-models
