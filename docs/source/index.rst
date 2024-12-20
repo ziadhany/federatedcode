@@ -25,6 +25,7 @@ you will find information on:
     :caption: Tutorial
 
     tutorial_getting_started
+    tutorial_remote_subscribe_package_update
 
 .. toctree::
     :maxdepth: 2
