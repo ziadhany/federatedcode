@@ -604,7 +604,7 @@ class Vulnerability(models.Model):
     )
 
     class Meta:
-        unique_together = [["repo"]]
+        unique_together = ('id', 'repo')
 
     @property
     def absolute_url(self):

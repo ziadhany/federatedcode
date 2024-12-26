@@ -109,7 +109,7 @@ class SearchPackageForm(forms.Form):
         label=False,
         widget=forms.TextInput(
             attrs={
-                "placeholder": "Please entre a valid purl ex: pkg:maven/org.apache.commons/io@1.3.4",
+                "placeholder": "Please enter a valid purl ex: pkg:maven/org.apache.commons/io",
                 "class": "input is-rounded",
                 "style": "width: 90%;",
             },
@@ -123,7 +123,7 @@ class SearchReviewForm(forms.Form):
         label=False,
         widget=forms.TextInput(
             attrs={
-                "placeholder": "Please Entre a valid Review Name",
+                "placeholder": "Please Enter a valid Review Name",
                 "class": "input is-rounded",
                 "style": "width: 90%;",
             },
@@ -137,7 +137,7 @@ class SearchRepositoryForm(forms.Form):
         label=False,
         widget=forms.TextInput(
             attrs={
-                "placeholder": "Please Entre a Repository URL ex: https://github.com/nexB/vulnerablecode-data",
+                "placeholder": "Please Enter a Repository URL ex: https://github.com/nexB/vulnerablecode-data",
                 "class": "input is-rounded",
                 "style": "width: 90%;",
             },
