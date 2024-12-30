@@ -10,22 +10,26 @@
 
     <link rel="stylesheet" href="{% static 'css/bulma.css' %}" />
     <link rel="stylesheet" href="{% static 'css/custom.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/font-awesome.css' %}" />
+    <link rel="stylesheet" href="{% static 'font-awesome/css/all.min.css' %}" />
     <link rel="stylesheet" href="{% static 'css/bulma-tooltip.css' %}" />
     <script src="{% static 'js/jquery-3.7.0.min.js' %}"></script>
 
-    {% block json_ld_script %}
-    {% endblock %}
-
+    {% block json_ld_script %}{% endblock %}
     {% block extra-head %}{% endblock %}
 </head>
 
-<body class="Site" style="background-color: #f6f8fa">
-    {% include "navbar.html" %}
-    {% include "messages.html" %}
-    {% block content %}
+<body class="Site">
+    <div class="container max-desktop-width is-fullheight">
+        {% include "navbar.html" %}
+        {% include "messages.html" %}
+        {% block content %}
+        {% endblock %}
+        {% include "footer.html" %}
+    </div>
+
+    <script src="{% static 'js/notification.js' %}" defer></script>
+    {% block scripts %}
     {% endblock %}
-    {% include "footer.html" %}
 </body>
 
 </html>
