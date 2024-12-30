@@ -226,6 +226,11 @@ class Note(models.Model):
     @property
     def absolute_url(self):
         return full_reverse("note-page", self.id)
+    
+    @property
+    def acct_avatar(self):
+        person = Person.objects.get(user__username=self.username)
+        return person.avatar
 
     @property
     def to_ap(self):
@@ -353,12 +358,12 @@ class Person(Actor):
     A person is a user can follow pacakge or just vote or create a notes
     """
 
-    avatar = models.ImageField(
-        upload_to="uploads/",
-        help_text="",
-        default="favicon-16x16.png",
-        null=True,
-    )
+    # avatar = models.ImageField(
+    #     upload_to="uploads/",
+    #     help_text="",
+    #     default="images/favicon-16x16.png",
+    #     null=True,
+    # )
 
     user = models.OneToOneField(
         User,
@@ -392,12 +397,22 @@ class Person(Actor):
         ]
 
     @property
+    def avatar(self):
+        from hashlib import sha256
+        email = ""
+        if self.user and (email:=self.user.email):
+            email = email.strip().lower()
+
+        gravatar = sha256(email.encode('utf-8')).hexdigest()
+        return f"https://gravatar.com/avatar/{gravatar}"
+
+    @property
     def local(self):
         return bool(self.user)
 
     @property
     def avatar_absolute_url(self):
-        return f'{"https://"}{FEDERATEDCODE_DOMAIN}{self.avatar.url}'
+        return self.avatar
 
     # TODO raise error if the user doesn't have a user or remote actor
     @property
