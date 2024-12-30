@@ -1,0 +1,10 @@
+about_resource: font-awesome/
+version: 6.7.2
+download_url: https://use.fontawesome.com/releases/v6.7.2/fontawesome-free-6.7.2-web.zip
+name: FontAwesome
+homepage_url: https://github.com/FortAwesome/Font-Awesome
+owner: FortAwesome
+author: Dave Gandy
+notes: Fonts provided by Font Awesome.
+license: ofl-1.1
+license_file: font-awesome.LICENSE
