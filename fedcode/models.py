@@ -226,7 +226,7 @@ class Note(models.Model):
     @property
     def absolute_url(self):
         return full_reverse("note-page", self.id)
-    
+
     @property
     def acct_avatar(self):
         person = Person.objects.get(user__username=self.username)
@@ -392,11 +392,12 @@ class Person(Actor):
     @property
     def avatar(self):
         from hashlib import sha256
+
         email = ""
-        if self.user and (email:=self.user.email):
+        if self.user and (email := self.user.email):
             email = email.strip().lower()
 
-        gravatar = sha256(email.encode('utf-8')).hexdigest()
+        gravatar = sha256(email.encode("utf-8")).hexdigest()
         return f"https://gravatar.com/avatar/{gravatar}"
 
     @property
@@ -612,7 +613,7 @@ class Vulnerability(models.Model):
     )
 
     class Meta:
-        unique_together = ('id', 'repo')
+        unique_together = ("id", "repo")
 
     @property
     def absolute_url(self):
