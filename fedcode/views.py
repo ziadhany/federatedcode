@@ -21,6 +21,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.models import auth
 from django.contrib.auth.views import LoginView
 from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator
 from django.http import Http404
 from django.http import HttpResponse
@@ -154,11 +155,19 @@ class HomeView(View):
             return redirect("login")
 
 
-class PersonView(DetailView):
+class PersonView(LoginRequiredMixin, DetailView):
     model = Person
     template_name = "user_profile.html"
     slug_field = "user__username"
     context_object_name = "person"
+
+    def get_object(self, queryset=None):
+        """Ensure that only logged-in user can see their profile."""
+        obj = super().get_object(queryset)
+
+        if obj.user != self.request.user:
+            raise PermissionDenied("You are not authorized to view this profile.")
+        return obj
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -602,7 +611,7 @@ class UserProfile(View):
 
 class PersonUpdateView(UpdateView):
     model = Person
-    fields = ["avatar", "summary"]
+    fields = ["summary"]
     template_name = "update_profile.html"
     slug_field = "user__username"
 
@@ -612,8 +621,7 @@ class PersonUpdateView(UpdateView):
     def get_form(self, *args, **kwargs):
         form = super(PersonUpdateView, self).get_form(*args, **kwargs)
         form.fields["summary"].widget.attrs["class"] = "textarea"
-        form.fields["summary"].help_text = ""
-        form.fields["avatar"].label = ""
+        form.fields["summary"].help_text = "Add your bio"
         return form
 
 
@@ -866,3 +874,11 @@ def revoke_token(request):
         },
     )
     return JsonResponse(json.loads(r.content), status=r.status_code, content_type=AP_CONTENT_TYPE)
+
+
+def permission_denied(request, exception=None):
+    return render(request, "403.html", {})
+
+
+def page_not_found(request, exception=None):
+    return render(request, "404.html", {})
