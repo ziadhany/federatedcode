@@ -355,15 +355,8 @@ class Package(Actor):
 
 class Person(Actor):
     """
-    A person is a user can follow pacakge or just vote or create a notes
+    A person is a user can follow package or just vote or create a notes
     """
-
-    # avatar = models.ImageField(
-    #     upload_to="uploads/",
-    #     help_text="",
-    #     default="images/favicon-16x16.png",
-    #     null=True,
-    # )
 
     user = models.OneToOneField(
         User,
