@@ -269,12 +269,18 @@ class CreateSync(LoginRequiredMixin, View):
 
 class UserLogin(LoginView):
     template_name = "login.html"
-    next_page = "/review-list"
+    next_page = "/"
+
+    def dispatch(self, request, *args, **kwargs):
+        # If user is already logged in, redirect to the next_page.
+        if request.user.is_authenticated:
+            return redirect(self.next_page)
+        return super().dispatch(request, *args, **kwargs)
 
 
 class PersonSignUp(FormView):
     form_class = PersonSignUpForm
-    success_url = "/review-list"
+    success_url = "/"
     template_name = "user_sign_up.html"
 
     def form_valid(self, form):
