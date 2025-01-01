@@ -90,6 +90,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     # OAUTH
     "oauth2_provider.middleware.OAuth2TokenMiddleware",
+    "fedcode.middleware.TimezoneMiddleware",
 ]
 
 ROOT_URLCONF = "federatedcode.urls"
