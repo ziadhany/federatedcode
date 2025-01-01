@@ -7,11 +7,11 @@
   <div class="navbar-menu">
     <div class="navbar-start">
       {% if user.person %}
-      <a class="navbar-item" href="{% url 'home-page' %}">
+      <a class="navbar-item {% if request.path == '/' %}is-active{% endif %}" href="{% url 'home-page' %}">
         My Packages
       </a>
       {% endif %}
-      <a class="navbar-item" href="{% url 'purl-list' %}">
+      <a class="navbar-item {% if request.path == '/purl-list' %}is-active{% endif %}" href="{% url 'purl-list' %}">
         All Packages
       </a>
       <a class="navbar-item" href="https://federatedcode.readthedocs.io/en/latest/" target="_blank">
@@ -42,9 +42,16 @@
       </div>
 
       <div class="navbar-dropdown is-right mr-2">
+        {% if request.path == '/users/@'|add:user.username %}
+        <a class="navbar-item is-active-light" href="{% url 'user-profile' user.username %}"
+          style="background-color: #dcdcdc;">
+          <strong>Profile</strong>
+        </a>
+        {% else %}
         <a class="navbar-item" href="{% url 'user-profile' user.username %}">
           <strong>Profile</strong>
         </a>
+        {% endif %}
         <a class="navbar-item has-text-danger" href="{% url 'logout' %}">
           <strong>Log out</strong>
         </a>
