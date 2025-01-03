@@ -39,9 +39,10 @@ class CreateNoteForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(CreateNoteForm, self).__init__(*args, **kwargs)
         self.fields["content"].widget.attrs.update(
-            {"class": "textarea", "placeholder": "Add a note...", "rows": 5}
+            {"class": "textarea", "placeholder": "Comment...", "rows": 5}
         )
         self.fields["content"].label = ""
+        self.fields["content"].help_text = ""
 
 
 class ReviewStatusForm(forms.ModelForm):
