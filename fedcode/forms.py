@@ -137,9 +137,8 @@ class SearchRepositoryForm(forms.Form):
         label=False,
         widget=forms.TextInput(
             attrs={
-                "placeholder": "Please Enter a Repository URL ex: https://github.com/nexB/vulnerablecode-data",
-                "class": "input is-rounded",
-                "style": "width: 90%;",
+                "placeholder": "Search a repository...",
+                "class": "input",
             },
         ),
     )
