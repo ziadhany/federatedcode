@@ -191,9 +191,16 @@ class PackageView(DetailView, FormMixin):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # slug = purl_string
 
-        context["purl_notes"] = Note.objects.filter(acct=generate_webfinger(self.kwargs["slug"]))
+        # Paginate Package updates.
+        purl_note_paginate_by = 10
+        purl_notes = Note.objects.filter(acct=generate_webfinger(self.kwargs["slug"]))
+        paginator = Paginator(purl_notes, purl_note_paginate_by)
+        page_number = self.request.GET.get("page")
+        page_obj = paginator.get_page(page_number)
+        context["purl_notes"] = page_obj
+        context["is_paginated"] = purl_notes.count() > purl_note_paginate_by
+        context["page_obj"] = page_obj
 
         context["followers"] = Follow.objects.filter(package=self.object)
 
@@ -324,7 +331,7 @@ class PackageListView(ListView, FormMixin):
     model = Package
     context_object_name = "package_list"
     template_name = "pkg_list.html"
-    paginate_by = 20
+    paginate_by = 30
     form_class = SearchPackageForm
 
     def get_queryset(self):

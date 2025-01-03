@@ -19,7 +19,7 @@ Your Profile
     </p>
 
     <figure class="media-left">
-      <p class="image is-64x64" style="margin: auto">
+      <p class="image is-128x128" style="margin: auto">
         <img src="{{ package.acct | get_pkg_image }}" alt="purl-image">
       </p>
     </figure>
@@ -118,7 +118,7 @@ Your Profile
     <div class="container mt-5 mb-5">
       <article class="panel is-info mr-6">
         <p class="panel-heading">
-          Updates
+          Package Events
         </p>
         <div class="panel-block">
           <article class="media box" style="width: 100%">
@@ -136,6 +136,24 @@ Your Profile
             </div>
           </article>
         </div>
+        {% if is_paginated %}
+        <nav class="pagination is-centered px-6 pt-6 pb-4" role="navigation" aria-label="pagination">
+          {% if page_obj.has_previous %}
+          <a class="pagination-previous" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+          {% endif %}
+
+          {% if page_obj.has_next %}
+          <a class="pagination-next" href="?page={{ page_obj.next_page_number }}">Next page</a>
+          {% endif %}
+
+          <ul class="pagination-list">
+            <li><a class="pagination-link" aria-label="Goto page 1" href="?page=1">1</a></li>
+            <li><span class="pagination-ellipsis">&hellip;</span></li>
+            <li><a class="pagination-link" aria-label="Goto page {{ page_obj.number }}"
+                href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a></li>
+          </ul>
+        </nav>
+        {% endif %}
       </article>
     </div>
   </div>
