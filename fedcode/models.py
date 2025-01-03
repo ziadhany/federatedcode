@@ -296,6 +296,10 @@ class Package(Actor):
         return Follow.objects.filter(package=self).count()
 
     @property
+    def notes_count(self):
+        return Note.objects.filter(acct=self.acct).count()
+
+    @property
     def followers(self):
         return Follow.objects.filter(package=self).values("person_id")
 

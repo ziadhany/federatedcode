@@ -110,9 +110,8 @@ class SearchPackageForm(forms.Form):
         label=False,
         widget=forms.TextInput(
             attrs={
-                "placeholder": "Please enter a valid purl ex: pkg:maven/org.apache.commons/io",
-                "class": "input is-rounded",
-                "style": "width: 90%;",
+                "placeholder": "Search a package...",
+                "class": "input ",
             },
         ),
     )

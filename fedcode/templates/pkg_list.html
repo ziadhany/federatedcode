@@ -4,6 +4,24 @@
 All Packages
 {% endblock %}
 
+{% block extra-head %}
+<style>
+  /* Remove the border below the table header */
+  thead th {
+    border-bottom: none !important;
+  }
+
+  tbody tr:hover {
+    background-color: #e0e0e0 !important;
+    cursor: pointer;
+  }
+
+  tbody tr:nth-child(even):hover {
+    background-color: #d3d3d3 !important;
+  }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="columns">
   <div class="column">
@@ -11,30 +29,57 @@ All Packages
 
   <div class="column is-two-thirds">
     <div class="content is-normal">
-      <h1>Package List</h1>
+      <h1>Discover Packages</h1>
       <hr />
     </div>
-    <form method="get" class="has-text-centered box" action="">
-      {{ form }}
-      <button type="submit" class="button is-link is-rounded">Search</button>
-    </form>
-    {% for package in package_list %}
-    <article class="media box mt-4 ">
-      <div class="media-left has-text-centered">
-        <h4>Number of Followers</h4>
-        <p>{{ package.followers_count }}</p>
-      </div>
-      <div class="media-content ">
-        <div class="content" style="border-left: 4px solid black;">
-          <h4 class="ml-3 mr-3"><a href="{% url 'purl-profile' package.purl %}"> {{ package.purl }} </a></h4>
-          <small class="ml-2">Created by @{{ package.service.user.username }}</small>
-          <br>
+    <form method="get" class="box px-6 mx-0" action="">
+      <div class="field has-addons">
+        <div class="control is-expanded">
+          {{ form.search }}
+        </div>
+        <div class="control">
+          <button type="submit" class="button is-info">Search</button>
         </div>
       </div>
-    </article>
-    {% endfor %}
+    </form>
+    <div class="box">
+      <table class="table is-striped  is-hoverable is-fullwidth">
+        <thead>
+          <tr>
+            <th colspan="3">
+              <div class="box is-small">
+                <div class="columns">
+                  <div class="column is-three-fifths">Package URL</div>
+                  <div class="column is-one-fifth">Activity</div>
+                  <div class="column is-one-fifth">Followers</div>
+                </div>
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for package in package_list %}
+          <tr>
+            <td colspan="3">
+              <a href="{% url 'purl-profile' package.purl %}" class="has-text-info">
+                <div class="columns px-5">
+                  <div class="column is-three-fifths">{{ package.purl }}</div>
+                  <div class="column is-one-fifth">{{ package.notes_count }}</div>
+                  <div class="column is-one-fifth">{{ package.followers_count }}</div>
+                </div>
+              </a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="3" class="has-text-centered">No packages found.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
     {% if is_paginated %}
-    <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+    <nav class="pagination is-centered px-5" role="navigation" aria-label="pagination">
       {% if page_obj.has_previous %}
       <a class="pagination-previous" href="?page={{ page_obj.previous_page_number }}">Previous</a>
       {% endif %}
@@ -51,7 +96,6 @@ All Packages
     </nav>
     {% endif %}
   </div>
-
   <div class="column"></div>
 </div>
 {% endblock %}
