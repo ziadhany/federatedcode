@@ -20,15 +20,14 @@ class CreateGitRepoForm(forms.ModelForm):
     class Meta:
         model = Repository
         fields = ["url"]
-        help_texts = {
-            "url": None,
-        }
 
     def __init__(self, *args, **kwargs):
         super(CreateGitRepoForm, self).__init__(*args, **kwargs)
         self.fields["url"].widget.attrs.update(
-            {"class": "input mb-5", "placeholder": "https://github.com/nexB/vulnerablecode-data"}
+            {"class": "input", "placeholder": "https://github.com/nexB/vulnerablecode-data"}
         )
+        self.fields["url"].help_text = ""
+        self.fields["url"].label = ""
 
 
 class CreateNoteForm(forms.ModelForm):
