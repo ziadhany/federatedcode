@@ -50,6 +50,10 @@ class RemoteActor(models.Model):
         help_text="A field to track when remote actor are updated",
     )
 
+    @property
+    def safe_url(self):
+        return f"{self.url.rstrip('/')}/"
+
 
 class Actor(models.Model):
     """
@@ -438,13 +442,13 @@ class Person(Actor):
     @property
     def inbox_url(self):
         if not self.local:
-            return urljoin(self.remote_actor.url, "inbox")
+            return urljoin(self.remote_actor.safe_url, "inbox")
         return full_reverse("user-inbox", self.user.username)
 
     @property
     def outbox_url(self):
         if not self.local:
-            return urljoin(self.remote_actor.url, "outbox")
+            return urljoin(self.remote_actor.safe_url, "outbox")
         return full_reverse("user-outbox", self.user.username)
 
     @property
@@ -456,7 +460,7 @@ class Person(Actor):
         if self.user:
             return full_reverse("user-ap-profile", self.user.username) + "#main-key"
         else:
-            return self.remote_actor.url + "#main-key"
+            return self.remote_actor.safe_url + "#main-key"
 
     @property
     def to_ap(self):
