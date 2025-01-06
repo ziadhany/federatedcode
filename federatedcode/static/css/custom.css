@@ -100,7 +100,7 @@ code {
     background-color: #ffffff;
     border: 0;
     padding: 0;
-    font-family: Consolas;
+    /* font-family: Consolas; */
 }
 
 /* start tabset */
@@ -204,7 +204,7 @@ code {
 }
 
 pre {
-    font-family: Consolas !important;
+    /* font-family: Consolas !important; */
     font-size: 13px;
     color: #cc0000;
     background-color: #f8f8f8;

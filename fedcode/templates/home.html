@@ -13,7 +13,7 @@ My Packages
 {% block content %}
 <div class="columns">
   <div class="column"></div>
-  <div class="column is-two-thirds">
+  <div class="column is-full pr-6 mr-6">
     <div class="content is-normal">
       <h1>My Packages</h1>
       <hr />
@@ -26,13 +26,13 @@ My Packages
       {% else %}
       <div>
         {% for note in page_note %}
-        <article class="media box">
+        <article class="media box px-2 mx-2">
           <figure>
             <p class="image is-64x64">
               <img src="{{ note.acct | get_pkg_image }}" alt="purl-image">
             </p>
           </figure>
-          <form class="ml-5 mr-4" name="vote-notes">
+          <form class="mx-1" name="vote-notes">
             <span class="icon ml-1">
               <!-- Vote Up Button -->
               <button name="vote-up" class="button is-rounded is-white" value="{{ note.id }}" type="submit">▲</button>
@@ -45,7 +45,7 @@ My Packages
           </form>
 
           <div class="media-content">
-            <div class="content">
+            <div class="content ml-3">
               <a href="{% url 'purl-profile' note.username %}">{{ note.acct }}</a>
               <hr />
               <pre class="has-text-black">{{ note.content }}</pre>
@@ -53,13 +53,13 @@ My Packages
               <button class="button" onclick="window.open('{% url 'note-page' note.id %}');">Comment 💬</button>
             </div>
           </div>
-          <div class="media-right">
-            <small>Last update: {{ note.updated_at }}</small>
+          <div class="media-right mr-4">
+            <small>{{ note.updated_at }}</small>
           </div>
         </article>
         {% endfor %}
 
-        <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+        <nav class="pagination is-centered px-6" role="navigation" aria-label="pagination">
           {% if page_note.has_previous %}
           <a class="pagination-previous" href="?page={{ page_note.previous_page_number }}">Previous</a>
           {% endif %}
