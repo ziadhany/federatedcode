@@ -4,6 +4,23 @@
 Your Profile
 {% endblock %}
 
+{% block extra-head %}
+<style>
+  /* Remove the border below the table header */
+  thead th {
+    border-bottom: none !important;
+  }
+
+  tbody tr:hover {
+    background-color: #e0e0e0 !important;
+    cursor: pointer;
+  }
+
+  tbody tr:nth-child(even):hover {
+    background-color: #d3d3d3 !important;
+  }
+</style>
+{% endblock %}
 
 {% block content %}
 <div class="columns">
@@ -47,32 +64,58 @@ Your Profile
 
   </div>
   <div class="column is-8 ml-3 mr-6">
-    <div class="container">
-      <article class="panel is-info">
-        {% if followings %}
-        <p class="panel-heading">
-          Following List
-        </p>
-        {% endif %}
-        {% for following in followings %}
-        <a class="panel-block is-active" href="#">
-          <a href="{% url 'purl-profile' following.package.purl %}" class="button is-fullwidth">
-            {{ following.package.purl }}@{{ following.package.service.user.username }}
-          </a>
-        </a>
-        {% endfor %}
-      </article>
-      <nav class="pagination is-rounded" role="navigation" aria-label="pagination">
+    <div class="box">
+      <table class="table is-striped is-hoverable is-fullwidth">
+        <thead>
+          <tr>
+            <th>
+              <div class="box is-small">
+                <div class="columns">
+                  <div class="column is-full">
+                    Followed Packages
+                  </div>
+                </div>
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for following in followings %}
+          <tr>
+            <td>
+              <a href="{% url 'purl-profile' following.package.purl %}" class="has-text-info">
+                <div class="columns px-5">
+                  <div class="column is-full">
+                    {{ following.package.acct }}
+                  </div>
+                </div>
+              </a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td class="has-text-centered" colspan="1">No package followed.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
 
-        {% if followings.has_previous %}
-        <a class="pagination-previous" href="?page={{ followings.previous_page_number }}">Previous</a>
-        {% endif %}
-
-        {% if followings.has_next %}
-        <a class="pagination-next" href="?page={{ followings.next_page_number }}">Next page</a>
-        {% endif %}
-      </nav>
     </div>
+    <nav class="pagination is-centered px-5" role="navigation" aria-label="pagination">
+      {% if followings.has_previous %}
+      <a class="pagination-previous" href="?page={{ followings.previous_page_number }}">Previous</a>
+      {% endif %}
+
+      {% if followings.has_next %}
+      <a class="pagination-next" href="?page={{ followings.next_page_number }}">Next page</a>
+      {% endif %}
+      <ul class="pagination-list">
+        <li><a class="pagination-link" aria-label="Goto page 1" href="?page=1">1</a></li>
+        <li><span class="pagination-ellipsis">&hellip;</span></li>
+        <li><a class="pagination-link" aria-label="Goto page {{ followings.number }}"
+            href="?page={{ followings.paginator.num_pages }}">{{ followings.paginator.num_pages }}</a></li>
+      </ul>
+    </nav>
   </div>
 </div>
 {% endblock %}
