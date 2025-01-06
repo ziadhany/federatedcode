@@ -19,27 +19,73 @@ Your Profile
   tbody tr:nth-child(even):hover {
     background-color: #d3d3d3 !important;
   }
+
+  .image-container {
+    position: relative;
+    text-align: center;
+  }
+
+  /* Camera icon styling */
+  .edit-button {
+    position: absolute;
+    bottom: -5%;
+    left: 70%;
+    transform: translateX(-50%);
+    background-color: #ffffffc6;
+    color: #252525;
+    border-radius: 50%;
+    padding: 10px;
+    cursor: pointer;
+    visibility: hidden;
+    border-color: #ffffffc6;
+  }
+
+  .image-container:hover .edit-button {
+    visibility: visible;
+  }
+
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1050;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000000b3;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .modal-content {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 5px;
+    max-width: 500px;
+    width: 80%;
+  }
+
+  .modal.is-active {
+    display: flex;
+  }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="columns">
   <div class="column box content is-offset-1">
-    <figure class="image is-128x128 mb-2" style="margin: auto">
-      <img class="is-rounded" src="{{ person.avatar }}?size=200">
-    </figure>
+    <div class="image-container is-centered">
+      <figure class="image is-128x128 mb-2" style="margin: auto">
+        <img class="is-rounded" src="{{ person.avatar }}?size=200" alt="Profile Picture">
+      </figure>
+      <button class="edit-button" onclick="openModal()">
+        <span class="icon is-small">
+          <i class="fas fa-camera"></i>
+        </span>
+      </button>
+    </div>
     <p class="is-size-5 has-text-centered">
       <a href="#">@{{ person.user.username }}</a>
-    </p>
-    <p class="is-size-6 has-text-centered">
-      We use
-      <a href="https://gravatar.com" target="_blank" rel="noopener noreferrer">
-        gravatar.com
-        <span class="icon is-small">
-          <i class="fas fa-external-link-alt fa-xs"></i>
-        </span>
-      </a>
-      to create your profile picture using your email address — {{ person.user.email }}
     </p>
     <nav class="level">
       <div class="level-item has-text-centered">
@@ -50,18 +96,16 @@ Your Profile
       </div>
       <div class="level-item has-text-centered">
         <div>
-          <p class="heading">reputation</p>
+          <p class="heading">Reputation</p>
           <p class="title">{{ person.reputation_value }}</p>
         </div>
       </div>
     </nav>
-
     <p class="is-size-6 has-text-centered">{{ person.summary }}</p>
     <p class="is-size-6 has-text-centered">
       <a href="{% url 'user-edit' person.user.username %}"><button type="submit"
           class="button is-link">Update</button></a>
     </p>
-
   </div>
   <div class="column is-8 ml-3 mr-6">
     <div class="box">
@@ -118,4 +162,35 @@ Your Profile
     </nav>
   </div>
 </div>
+
+<!-- Popup modal -->
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <p class="is-size-6 has-text-centered">
+      We use
+      <a href="https://gravatar.com" target="_blank" rel="noopener noreferrer">
+        gravatar.com
+        <span class="icon is-small">
+          <i class="fas fa-external-link-alt fa-xs"></i>
+        </span>
+      </a>
+      to create your profile picture using your email address — {{ person.user.email }}
+    </p>
+    <div class="has-text-centered mt-3">
+      <button class="button is-info" onclick="closeModal()">Close</button>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  function openModal() {
+    document.getElementById("modal").classList.add("is-active");
+  }
+
+  function closeModal() {
+    document.getElementById("modal").classList.remove("is-active");
+  }
+</script>
 {% endblock %}
