@@ -7,7 +7,7 @@ Add Repository
 {% block content %}
 <div class="columns">
   <div class="column"></div>
-  <div class="column is-two-fifths">
+  <div class="column is-two-thirds">
     {% if form.errors %}
     <article class="message is-danger">
       <div class="message-header">
@@ -19,6 +19,7 @@ Add Repository
     </article>
     {% endif %}
     <h2 class="title">Add Git Repository</h2>
+    <hr />
     <form method="post" class="box px-6 mx-0">
       {% csrf_token %}
       <div class="field has-addons">

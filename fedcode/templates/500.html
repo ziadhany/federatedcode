@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-Page Not Found
+Something Went Wrong
 {% endblock %}
 
 {% block content %}
@@ -9,10 +9,10 @@ Page Not Found
     <div class="hero-body">
         <div class="container has-text-centered">
             <h1 class="title is-1 pb-2">
-                404 - Page Not Found
+                Oops! Something went wrong.
             </h1>
             <p class="subtitle is-4">
-                Sorry, the page you're looking for does not exist.
+                We're experiencing some technical issues at the moment. Please try again later.
             </p>
             <a href="{% url 'purl-list' %}" class="button is-info">Explore available packages</a>
         </div>
