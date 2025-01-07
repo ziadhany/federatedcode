@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}
+Something Went Wrong
+{% endblock %}
+
+{% block content %}
+<section class="hero is-medium is-dark">
+    <div class="hero-body">
+        <div class="container has-text-centered">
+            <h1 class="title is-1 pb-2">
+                Oops! Something went wrong.
+            </h1>
+            <p class="subtitle is-4">
+                We're experiencing some technical issues at the moment. Please try again later.
+            </p>
+            <a href="{% url 'purl-list' %}" class="button is-info">Explore available packages</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
