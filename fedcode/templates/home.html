@@ -17,11 +17,10 @@ My Packages
     <div class="content is-normal">
       <h1>My Packages</h1>
       <hr />
-
       {% if not page_note %}
       <div class="has-text-centered">
         <p class="is-size-4">Follow the packages to see the updates.</p>
-        <a href="{% url 'purl-list' %}" class="button is-primary">Browse All Packages</a>
+        <a href="{% url 'purl-list' %}" class="button is-info">Browse All Packages</a>
       </div>
       {% else %}
       <div>
