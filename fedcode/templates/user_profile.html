@@ -174,7 +174,12 @@ Your Profile
           <i class="fas fa-external-link-alt fa-xs"></i>
         </span>
       </a>
-      to create your profile picture using your email address — {{ person.user.email }}
+      to create your profile picture using your email address —
+      {% if person.user.email %}
+      <span class="has-text-info">{{ person.user.email }}</span>
+      {% else %}
+      <span class="has-text-danger">No email found!</span>
+      {% endif %}
     </p>
     <div class="has-text-centered mt-3">
       <button class="button is-info" onclick="closeModal()">Close</button>
