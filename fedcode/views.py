@@ -234,7 +234,7 @@ def is_service_user(view):
         if hasattr(request.user, "service"):
             return view(request, *args, **kwargs)
         else:
-            return HttpResponseForbidden()
+            raise PermissionDenied("You are not authorized to view this page.")
 
     return wrapper
 
@@ -887,11 +887,3 @@ def revoke_token(request):
         },
     )
     return JsonResponse(json.loads(r.content), status=r.status_code, content_type=AP_CONTENT_TYPE)
-
-
-def permission_denied(request, exception=None):
-    return render(request, "403.html", {})
-
-
-def page_not_found(request, exception=None):
-    return render(request, "404.html", {})

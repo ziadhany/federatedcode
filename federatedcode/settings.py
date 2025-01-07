@@ -280,6 +280,3 @@ AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
     "oauth2_provider.backends.OAuth2Backend",
 )
-
-HANDLER403 = "fedcode.views.permission_denied"
-HANDLER404 = "fedcode.views.page_not_found"
