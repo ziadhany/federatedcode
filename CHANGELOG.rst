@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-v0.0.1
-------
+v0.1.0 (January 7, 2025)
+---------------------------
 
-- 2024-05-31 -- Initial release.
+- Initial release of ``federatedcode``.
