@@ -1,31 +1,36 @@
 {% extends "base.html" %}
+
 {% block title %}
-Sign up page
+Add Repository
 {% endblock %}
 
 {% block content %}
 <div class="columns">
   <div class="column"></div>
   <div class="column is-two-fifths">
-           {% if form.errors %}
-  <article class="message is-danger">
-  <div class="message-header">
-    <p>Error</p>
-  </div>
-  <div class="message-body">
+    {% if form.errors %}
+    <article class="message is-danger">
+      <div class="message-header">
+        <p>Error</p>
+      </div>
+      <div class="message-body">
         {{ form.errors }}
-  </div>
-</article>
-{% endif %}
-      <h2 class="title">Create Git Repository</h2>
-      <form method="post">
-          {% csrf_token %}
+      </div>
+    </article>
+    {% endif %}
+    <h2 class="title">Add Git Repository</h2>
+    <form method="post" class="box px-6 mx-0">
+      {% csrf_token %}
+      <div class="field has-addons">
+        <div class="control is-expanded">
           {{ form.as_p }}
-          <input class="button is-fullwidth is-success" type="submit" value="Submit">
-   </form>
+        </div>
+        <div class="control">
+          <button type="submit" value="submit" class="button is-info">Submit</button>
+        </div>
+      </div>
+    </form>
   </div>
-
   <div class="column"></div>
 </div>
-
 {% endblock %}

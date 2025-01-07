@@ -20,15 +20,14 @@ class CreateGitRepoForm(forms.ModelForm):
     class Meta:
         model = Repository
         fields = ["url"]
-        help_texts = {
-            "url": None,
-        }
 
     def __init__(self, *args, **kwargs):
         super(CreateGitRepoForm, self).__init__(*args, **kwargs)
         self.fields["url"].widget.attrs.update(
-            {"class": "input mb-5", "placeholder": "https://github.com/nexB/vulnerablecode-data"}
+            {"class": "input", "placeholder": "https://github.com/nexB/vulnerablecode-data"}
         )
+        self.fields["url"].help_text = ""
+        self.fields["url"].label = ""
 
 
 class CreateNoteForm(forms.ModelForm):
@@ -39,9 +38,10 @@ class CreateNoteForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(CreateNoteForm, self).__init__(*args, **kwargs)
         self.fields["content"].widget.attrs.update(
-            {"class": "textarea", "placeholder": "Add a note...", "rows": 5}
+            {"class": "textarea", "placeholder": "Comment...", "rows": 5}
         )
         self.fields["content"].label = ""
+        self.fields["content"].help_text = ""
 
 
 class ReviewStatusForm(forms.ModelForm):
@@ -109,9 +109,8 @@ class SearchPackageForm(forms.Form):
         label=False,
         widget=forms.TextInput(
             attrs={
-                "placeholder": "Please enter a valid purl ex: pkg:maven/org.apache.commons/io",
-                "class": "input is-rounded",
-                "style": "width: 90%;",
+                "placeholder": "Search a package...",
+                "class": "input ",
             },
         ),
     )
@@ -137,9 +136,8 @@ class SearchRepositoryForm(forms.Form):
         label=False,
         widget=forms.TextInput(
             attrs={
-                "placeholder": "Please Enter a Repository URL ex: https://github.com/nexB/vulnerablecode-data",
-                "class": "input is-rounded",
-                "style": "width: 90%;",
+                "placeholder": "Search a repository...",
+                "class": "input",
             },
         ),
     )

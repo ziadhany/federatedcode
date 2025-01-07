@@ -21,6 +21,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.models import auth
 from django.contrib.auth.views import LoginView
 from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator
 from django.http import Http404
 from django.http import HttpResponse
@@ -154,11 +155,19 @@ class HomeView(View):
             return redirect("login")
 
 
-class PersonView(DetailView):
+class PersonView(LoginRequiredMixin, DetailView):
     model = Person
     template_name = "user_profile.html"
     slug_field = "user__username"
     context_object_name = "person"
+
+    def get_object(self, queryset=None):
+        """Ensure that only logged-in user can see their profile."""
+        obj = super().get_object(queryset)
+
+        if obj.user != self.request.user:
+            raise PermissionDenied("You are not authorized to view this profile.")
+        return obj
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -182,9 +191,16 @@ class PackageView(DetailView, FormMixin):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # slug = purl_string
 
-        context["purl_notes"] = Note.objects.filter(acct=generate_webfinger(self.kwargs["slug"]))
+        # Paginate Package updates.
+        purl_note_paginate_by = 10
+        purl_notes = Note.objects.filter(acct=generate_webfinger(self.kwargs["slug"]))
+        paginator = Paginator(purl_notes, purl_note_paginate_by)
+        page_number = self.request.GET.get("page")
+        page_obj = paginator.get_page(page_number)
+        context["purl_notes"] = page_obj
+        context["is_paginated"] = purl_notes.count() > purl_note_paginate_by
+        context["page_obj"] = page_obj
 
         context["followers"] = Follow.objects.filter(package=self.object)
 
@@ -260,12 +276,18 @@ class CreateSync(LoginRequiredMixin, View):
 
 class UserLogin(LoginView):
     template_name = "login.html"
-    next_page = "/review-list"
+    next_page = "/"
+
+    def dispatch(self, request, *args, **kwargs):
+        # If user is already logged in, redirect to the next_page.
+        if request.user.is_authenticated:
+            return redirect(self.next_page)
+        return super().dispatch(request, *args, **kwargs)
 
 
 class PersonSignUp(FormView):
     form_class = PersonSignUpForm
-    success_url = "/review-list"
+    success_url = "/"
     template_name = "user_sign_up.html"
 
     def form_valid(self, form):
@@ -309,7 +331,7 @@ class PackageListView(ListView, FormMixin):
     model = Package
     context_object_name = "package_list"
     template_name = "pkg_list.html"
-    paginate_by = 20
+    paginate_by = 30
     form_class = SearchPackageForm
 
     def get_queryset(self):
@@ -602,7 +624,7 @@ class UserProfile(View):
 
 class PersonUpdateView(UpdateView):
     model = Person
-    fields = ["avatar", "summary"]
+    fields = ["summary"]
     template_name = "update_profile.html"
     slug_field = "user__username"
 
@@ -612,8 +634,7 @@ class PersonUpdateView(UpdateView):
     def get_form(self, *args, **kwargs):
         form = super(PersonUpdateView, self).get_form(*args, **kwargs)
         form.fields["summary"].widget.attrs["class"] = "textarea"
-        form.fields["summary"].help_text = ""
-        form.fields["avatar"].label = ""
+        form.fields["summary"].help_text = "Add your bio"
         return form
 
 
@@ -866,3 +887,11 @@ def revoke_token(request):
         },
     )
     return JsonResponse(json.loads(r.content), status=r.status_code, content_type=AP_CONTENT_TYPE)
+
+
+def permission_denied(request, exception=None):
+    return render(request, "403.html", {})
+
+
+def page_not_found(request, exception=None):
+    return render(request, "404.html", {})

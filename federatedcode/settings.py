@@ -90,6 +90,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     # OAUTH
     "oauth2_provider.middleware.OAuth2TokenMiddleware",
+    "fedcode.middleware.TimezoneMiddleware",
 ]
 
 ROOT_URLCONF = "federatedcode.urls"
@@ -128,6 +129,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "django.template.context_processors.request",
+                "federatedcode.context_processors.version",
             ],
         },
     },
@@ -278,3 +280,6 @@ AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
     "oauth2_provider.backends.OAuth2Backend",
 )
+
+HANDLER403 = "fedcode.views.permission_denied"
+HANDLER404 = "fedcode.views.page_not_found"

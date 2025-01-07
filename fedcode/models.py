@@ -50,6 +50,10 @@ class RemoteActor(models.Model):
         help_text="A field to track when remote actor are updated",
     )
 
+    @property
+    def safe_url(self):
+        return f"{self.url.rstrip('/')}/"
+
 
 class Actor(models.Model):
     """
@@ -228,6 +232,11 @@ class Note(models.Model):
         return full_reverse("note-page", self.id)
 
     @property
+    def acct_avatar(self):
+        person = Person.objects.get(user__username=self.username)
+        return person.avatar
+
+    @property
     def to_ap(self):
         return {
             "id": self.absolute_url,
@@ -291,6 +300,10 @@ class Package(Actor):
         return Follow.objects.filter(package=self).count()
 
     @property
+    def notes_count(self):
+        return Note.objects.filter(acct=self.acct).count()
+
+    @property
     def followers(self):
         return Follow.objects.filter(package=self).values("person_id")
 
@@ -350,15 +363,8 @@ class Package(Actor):
 
 class Person(Actor):
     """
-    A person is a user can follow pacakge or just vote or create a notes
+    A person is a user can follow package or just vote or create a notes
     """
-
-    avatar = models.ImageField(
-        upload_to="uploads/",
-        help_text="",
-        default="favicon-16x16.png",
-        null=True,
-    )
 
     user = models.OneToOneField(
         User,
@@ -392,12 +398,23 @@ class Person(Actor):
         ]
 
     @property
+    def avatar(self):
+        from hashlib import sha256
+
+        email = ""
+        if self.user and (email := self.user.email):
+            email = email.strip().lower()
+
+        gravatar = sha256(email.encode("utf-8")).hexdigest()
+        return f"https://gravatar.com/avatar/{gravatar}"
+
+    @property
     def local(self):
         return bool(self.user)
 
     @property
     def avatar_absolute_url(self):
-        return f'{"https://"}{FEDERATEDCODE_DOMAIN}{self.avatar.url}'
+        return self.avatar
 
     # TODO raise error if the user doesn't have a user or remote actor
     @property
@@ -425,13 +442,13 @@ class Person(Actor):
     @property
     def inbox_url(self):
         if not self.local:
-            return urljoin(self.remote_actor.url, "inbox")
+            return urljoin(self.remote_actor.safe_url, "inbox")
         return full_reverse("user-inbox", self.user.username)
 
     @property
     def outbox_url(self):
         if not self.local:
-            return urljoin(self.remote_actor.url, "outbox")
+            return urljoin(self.remote_actor.safe_url, "outbox")
         return full_reverse("user-outbox", self.user.username)
 
     @property
@@ -443,7 +460,7 @@ class Person(Actor):
         if self.user:
             return full_reverse("user-ap-profile", self.user.username) + "#main-key"
         else:
-            return self.remote_actor.url + "#main-key"
+            return self.remote_actor.safe_url + "#main-key"
 
     @property
     def to_ap(self):
@@ -604,7 +621,7 @@ class Vulnerability(models.Model):
     )
 
     class Meta:
-        unique_together = ('id', 'repo')
+        unique_together = ("id", "repo")
 
     @property
     def absolute_url(self):

@@ -13,7 +13,8 @@ tab.Site {
 }
 
 .container.max-desktop-width {
-    max-width: 960px;
+    width:100%;
+    max-width: 100%;
 }
 
 body {
@@ -78,7 +79,7 @@ a.button.paging:visited {
 
 @media screen and (min-width: 1024px) {
     .footer {
-        width: 960px;
+        width: 100%;
     }
 }
 
@@ -99,7 +100,7 @@ code {
     background-color: #ffffff;
     border: 0;
     padding: 0;
-    font-family: Consolas;
+    /* font-family: Consolas; */
 }
 
 /* start tabset */
@@ -173,8 +174,9 @@ code {
 
 /* end tabset */
 
+.table.vcio-table tr:last-child td,
 .table.vcio-table td {
-    border: 0;
+    border: solid 1px #dbdbdb;
 }
 
 .table th {
@@ -185,34 +187,24 @@ code {
     border-color: #dbdbdb;
 }
 
-.table td {
-    word-wrap: break-word;
-    /* 8/24/2022 Wednesday 4:56:57 PM.  We need this for just 1 table as I recall, displaying some sort of data with few/no word breaks
-    but this messes up the look of columns that need a word-break wrap
-    TODO: identify and create separate CSS class for that table */
-    /* word-break: break-all; */
-}
-
 .wrap-strings {
-    word-break: break-all;
+    word-break: break-word;
 }
 
 .two-col-left {
-    width: 160px;
+    width: 255px;
     text-align: right !important;
     font-weight: bold;
-    padding-right: 20px !important;
+    padding-right: 15px !important;
     line-height: 20px;
-    border: solid 1px #e8e8e8 !important;
 }
 
 .two-col-right {
-    border: solid 1px #e8e8e8 !important;
     line-height: 20px;
 }
 
 pre {
-    font-family: Consolas !important;
+    /* font-family: Consolas !important; */
     font-size: 13px;
     color: #cc0000;
     background-color: #f8f8f8;
@@ -350,10 +342,9 @@ a.small_page_button {
 }
 
 .details-container {
-    border: solid 1px #e8e8e8;
     border: 0;
     border-radius: 6px;
-    box-shadow: 0 0.5em 1em -0.125em rgb(10 10 10 / 10%), 0 0px 0 1px rgb(10 10 10 / 2%);
+    box-shadow: 0 0.5em 1em -0.125em rgba(8, 8, 8, 0.1), 0 0px 0 1px rgba(10, 10, 10, 0.02);
 }
 
 .about-hover-div {
@@ -367,5 +358,5 @@ a.small_page_button {
 }
 
 span.tag.custom {
-    margin: 0px 0px 6px 10px;
+    margin: 0px 0px 0px 10px;
 }

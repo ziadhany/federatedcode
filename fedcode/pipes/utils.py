@@ -19,6 +19,8 @@ from fedcode.models import Note
 
 
 def create_note(pkg, note_dict):
+    # TODO: also take argument for source of the note ideally github blob for
+    # for file.
     note, _ = Note.objects.get_or_create(acct=pkg.acct, content=saneyaml.dump(note_dict))
     pkg.notes.add(note)
     create_activity = CreateActivity(actor=pkg.to_ap, object=note.to_ap)

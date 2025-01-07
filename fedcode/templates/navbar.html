@@ -1,80 +1,95 @@
-<nav class="navbar is-dark mb-6" role="navigation" aria-label="main navigation">
-  <div class="navbar-brand">
-     <div class="navbar-brand ml-3">
-        <a class="navbar-item is-size-4 has-text-weight-bold" href="/">
-            Federated Code<span class="nexb-orange">.</span>io
-        </a>
-    </div>
+{% load static %}
 
-    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
+<nav class="navbar is-dark mb-6 border-bottom-radius" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand ml-3">
+    <a class="navbar-item is-size-4 has-text-weight-bold" href="/">
+      FederatedCode<span class="nexb-orange">.</span>io
     </a>
   </div>
   <div class="navbar-menu">
     <div class="navbar-start">
-      <a class="navbar-item" href="/review-list">
-        Reviews
+      {% if user.person %}
+      <a class="navbar-item {% if request.path == '/' %}is-active{% endif %}" href="{% url 'home-page' %}">
+        My Packages
       </a>
-
-      <a class="navbar-item" href="/purl-list">
-        Packages
-      </a>
-
-      {% if user.service %}
-          <a class="navbar-item" href="/create-repo">
-            Create Git Repo
-          </a>
       {% endif %}
-
-      <div class="navbar-item has-dropdown is-hoverable">
-        <a class="navbar-link">
-          More
+      <a class="navbar-item {% if request.path == '/purl-list' %}is-active{% endif %}" href="{% url 'purl-list' %}">
+        All Packages
+      </a>
+      <a class="navbar-item" href="https://federatedcode.readthedocs.io/en/latest/" target="_blank">
+        Documentation
+      </a>
+    </div>
+  </div>
+  <div class="navbar-end">
+    <div class="navbar-item">
+      <div class="buttons">
+        {% if not user.is_authenticated %}
+        <a class="button is-info" href="{% url 'signup' %}">
+          <strong>Sign up</strong>
         </a>
-
-        <div class="navbar-dropdown">
-         <a class="navbar-item" href="/repo-list">
-            Git Repo List
-         </a>
-
-          <hr class="navbar-divider">
-            <a class="navbar-item" href="https://github.com/nexB/federatedcode#readme">
-                About
-            </a>
-          <a class="navbar-item" href="https://github.com/nexB/federatedcode/issues/new">
-            Report an issue
-          </a>
-        {% if user.is_authenticated %}
-          <hr class="navbar-divider">
-          <a class="navbar-item is-light" href="/accounts/logout">
-              Log out
-          </a>
+        <a class="button is-light" href="{% url 'login' %}">
+          <strong>Log in</strong>
+        </a>
         {% endif %}
-        </div>
       </div>
     </div>
 
-    <div class="navbar-end">
-      <div class="navbar-item">
-        <div class="buttons">
-          {% if not user.is_authenticated %}
-          <a class="button is-primary" href="/accounts/sign-up">
-            <strong>Sign up</strong>
-          </a>
-          <a class="button is-light" href="/accounts/login">
-            <strong>Log in</strong>
-          </a>
+    {% if user.person or user.service %}
+    <div class="navbar-item has-dropdown is-hoverable">
+      <div class="navbar-link is-arrowless">
+        <figure class="image is-32x32">
+          {% if user.service %}
+          <img src="{% static 'images/aboutcode_favicon-32x32.png' %}">
+          {% else %}
+          <img src="{{ user.person.avatar }}">
           {% endif %}
+        </figure>
+      </div>
+
+      <div class="navbar-dropdown is-right mr-2">
+        {% if user.person %}
+        {% if request.path == '/users/@'|add:user.username %}
+        <a class="navbar-item is-active-light" href="{% url 'user-profile' user.username %}"
+          style="background-color: #dcdcdc;">
+          <strong>Profile</strong>
+        </a>
+        {% else %}
+        <a class="navbar-item" href="{% url 'user-profile' user.username %}">
+          <strong>Profile</strong>
+        </a>
+        {% endif %}
+        {% endif %}
+        {% if user.service %}
+        {% if request.path == '/create-repo' %}
+        <a class="navbar-item is-active-light" href="{% url 'repo-create' %}" style="background-color: #dcdcdc;">
+          <strong>Add Repo</strong>
+        </a>
+        {% else %}
+        <a class="navbar-item" href="{% url 'repo-create' %}">
+          <strong>Add Repo</strong>
+        </a>
+        {% endif %}
+        {% if request.path == '/repo-list' %}
+        <a class="navbar-item is-active-light" href="{% url 'repo-list' %}" style="background-color: #dcdcdc;">
+          <strong>All Repo</strong>
+        </a>
+        {% else %}
+        <a class="navbar-item" href="{% url 'repo-list' %}">
+          <strong>All Repo</strong>
+        </a>
+        {% endif %}
+        {% endif %}
+
+        <a class="navbar-item has-text-danger" href="{% url 'logout' %}">
+          <strong>Log out</strong>
+        </a>
+        <hr class="navbar-divider">
+        <div class="navbar-item">
+          v{{ FEDERATEDCODE_VERSION }}
         </div>
       </div>
-        <figure class="image is-48x48 mt-1 ml-1 mr-1">
-            {% if user.person %}
-                <a href="{% url 'user-profile' user.username %}">
-                    <img class="is-rounded" src="{{ user.person.avatar.url }}" >
-                </a>
-            {% endif %}
-        </figure>
     </div>
+    {% endif %}
   </div>
 </nav>
