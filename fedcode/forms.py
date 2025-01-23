@@ -8,6 +8,7 @@
 #
 
 from django import forms
+from django.contrib.admin.forms import AdminAuthenticationForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -155,4 +156,13 @@ class UserLoginForm(AuthenticationForm):
             "required": ("Captcha is required"),
         },
         widget=ReCaptchaV2Checkbox,
+    )
+
+
+class AdminLoginForm(AdminAuthenticationForm):
+    captcha = ReCaptchaField(
+        error_messages={
+            "required": ("Captcha is required"),
+        },
+        widget=ReCaptchaV2Checkbox(),
     )

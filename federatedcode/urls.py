@@ -13,6 +13,7 @@ from django.urls import include
 from django.urls import path
 
 from fedcode import views
+from fedcode.views import AdminLoginView
 from fedcode.views import CreateReview
 from fedcode.views import CreateSync
 from fedcode.views import CreatGitView
@@ -45,6 +46,7 @@ from fedcode.views import redirect_repository
 from fedcode.views import redirect_vulnerability
 
 urlpatterns = [
+    path("admin/login/", AdminLoginView.as_view(), name="admin-login"),
     path("admin/", admin.site.urls),
     path(".well-known/webfinger", WebfingerView.as_view(), name="web-finger"),
     path("", HomeView.as_view(), name="home-page"),
