@@ -10,7 +10,10 @@ User Login
             {% if form.errors %}
             <div class="notification is-danger">
                   <button class="delete"></button>
-                  <strong>Error!</strong> Your username and password didn't match. Please try again.
+                  <strong>Error!</strong>
+                  {% for error in form.errors.values %}
+                        {{ error }}
+                  {% endfor %}
             </div>
             {% endif %}
 
@@ -32,7 +35,11 @@ User Login
                                     autocomplete="current-password" required id="id_password">
                         </div>
                   </div>
-
+                  <div class="field">
+                        <div class="control">
+                              {{ form.captcha }}
+                        </div>
+                  </div>
                   <div class="field">
                         <div class="control">
                               <input class="button is-fullwidth is-info" type="submit" value="Log in">

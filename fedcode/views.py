@@ -57,6 +57,7 @@ from fedcode.forms import SearchPackageForm
 from fedcode.forms import SearchRepositoryForm
 from fedcode.forms import SearchReviewForm
 from fedcode.forms import SubscribePackageForm
+from fedcode.forms import UserLoginForm
 from fedcode.models import Follow
 from fedcode.models import Note
 from fedcode.models import Package
@@ -277,6 +278,7 @@ class CreateSync(LoginRequiredMixin, View):
 class UserLogin(LoginView):
     template_name = "login.html"
     next_page = "/"
+    form_class = UserLoginForm
 
     def dispatch(self, request, *args, **kwargs):
         # If user is already logged in, redirect to the next_page.
