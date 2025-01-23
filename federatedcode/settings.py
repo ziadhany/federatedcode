@@ -61,6 +61,10 @@ FEDERATEDCODE_WORKSPACE_LOCATION = env.str("FEDERATEDCODE_WORKSPACE_LOCATION", "
 FEDERATEDCODE_CLIENT_ID = env.str("FEDERATEDCODE_CLIENT_ID")
 FEDERATEDCODE_CLIENT_SECRET = env.str("FEDERATEDCODE_CLIENT_SECRET")
 
+RECAPTCHA_PUBLIC_KEY = env.str("RECAPTCHA_PUBLIC_KEY")
+RECAPTCHA_PRIVATE_KEY = env.str("RECAPTCHA_PRIVATE_KEY")
+SILENCED_SYSTEM_CHECKS = ["captcha.recaptcha_test_key_error"]
+RECAPTCHA_DOMAIN = env.str("RECAPTCHA_DOMAIN", "www.recaptcha.net")
 
 # Application definition
 
@@ -78,6 +82,7 @@ INSTALLED_APPS = [
     "django.contrib.humanize",
     # Third-party apps
     "oauth2_provider",
+    "django_recaptcha",
 ]
 
 MIDDLEWARE = [
