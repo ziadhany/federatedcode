@@ -10,7 +10,6 @@ import difflib
 import json
 import logging
 import os.path
-from urllib.parse import urlparse
 
 import requests
 from django.contrib import messages
@@ -47,6 +46,7 @@ from django.views.generic.edit import UpdateView
 from fedcode.activitypub import AP_CONTEXT
 from fedcode.activitypub import create_activity_obj
 from fedcode.activitypub import has_valid_header
+from fedcode.forms import AdminLoginForm
 from fedcode.forms import CreateGitRepoForm
 from fedcode.forms import CreateNoteForm
 from fedcode.forms import CreateReviewForm
@@ -57,6 +57,7 @@ from fedcode.forms import SearchPackageForm
 from fedcode.forms import SearchRepositoryForm
 from fedcode.forms import SearchReviewForm
 from fedcode.forms import SubscribePackageForm
+from fedcode.forms import UserLoginForm
 from fedcode.models import Follow
 from fedcode.models import Note
 from fedcode.models import Package
@@ -277,6 +278,7 @@ class CreateSync(LoginRequiredMixin, View):
 class UserLogin(LoginView):
     template_name = "login.html"
     next_page = "/"
+    form_class = UserLoginForm
 
     def dispatch(self, request, *args, **kwargs):
         # If user is already logged in, redirect to the next_page.
@@ -887,3 +889,8 @@ def revoke_token(request):
         },
     )
     return JsonResponse(json.loads(r.content), status=r.status_code, content_type=AP_CONTENT_TYPE)
+
+
+class AdminLoginView(LoginView):
+    template_name = "admin_login.html"
+    authentication_form = AdminLoginForm

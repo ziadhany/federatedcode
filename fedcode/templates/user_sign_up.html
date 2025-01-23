@@ -17,7 +17,9 @@ User Signup
           <p>Error</p>
         </div>
         <div class="message-body">
-          {{ form.errors }}
+          {% for error in form.errors.values %}
+            {{ error }}
+          {% endfor %}
         </div>
       </article>
     </div>
@@ -59,6 +61,11 @@ User Signup
         <div class="control">
           <input class="input" type="password" placeholder="Confirm password" name="password2"
             autocomplete="new-password" required id="id_password2">
+        </div>
+      </div>
+      <div class="field">
+        <div class="control">
+          {{ form.captcha }}
         </div>
       </div>
       <input class="button is-fullwidth is-info" type="submit" value="Sign Up">

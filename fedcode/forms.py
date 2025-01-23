@@ -8,8 +8,12 @@
 #
 
 from django import forms
+from django.contrib.admin.forms import AdminAuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django_recaptcha.fields import ReCaptchaField
+from django_recaptcha.widgets import ReCaptchaV2Checkbox
 
 from .models import Note
 from .models import Repository
@@ -58,6 +62,9 @@ class ReviewStatusForm(forms.ModelForm):
 
 
 class PersonSignUpForm(UserCreationForm):
+    captcha = ReCaptchaField(
+        error_messages={"required": ("Captcha is required")}, widget=ReCaptchaV2Checkbox
+    )
     email = forms.EmailField(max_length=254)
 
     class Meta:
@@ -140,4 +147,22 @@ class SearchRepositoryForm(forms.Form):
                 "class": "input",
             },
         ),
+    )
+
+
+class UserLoginForm(AuthenticationForm):
+    captcha = ReCaptchaField(
+        error_messages={
+            "required": ("Captcha is required"),
+        },
+        widget=ReCaptchaV2Checkbox,
+    )
+
+
+class AdminLoginForm(AdminAuthenticationForm):
+    captcha = ReCaptchaField(
+        error_messages={
+            "required": ("Captcha is required"),
+        },
+        widget=ReCaptchaV2Checkbox(),
     )
