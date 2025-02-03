@@ -17,9 +17,13 @@ User Signup
           <p>Error</p>
         </div>
         <div class="message-body">
-          {% for error in form.errors.values %}
-            {{ error }}
-          {% endfor %}
+          {% if form.errors.captcha %}
+            {{ form.errors.captcha }}
+          {% else %}
+            {% for error in form.errors.values %}
+              {{ error }}
+            {% endfor %}
+          {% endif %}
         </div>
       </article>
     </div>

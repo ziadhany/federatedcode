@@ -11,9 +11,13 @@ User Login
             <div class="notification is-danger">
                   <button class="delete"></button>
                   <strong>Error!</strong>
-                  {% for error in form.errors.values %}
-                        {{ error }}
-                  {% endfor %}
+                  {% if form.errors.captcha %}
+                        {{ form.errors.captcha }}
+                  {% else %}
+                        {% for error in form.errors.values %}
+                              {{ error }}
+                        {% endfor %}
+                  {% endif %}
             </div>
             {% endif %}
 
