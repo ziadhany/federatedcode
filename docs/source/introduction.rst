@@ -43,8 +43,8 @@ What is FederatedCode?
 
 **FederatedCode** is composed of multiple distributed sub-systems:
 
-- A system to store versioned metadata as structure text (JSON, YAML) in multiple Git repositories
-  structured to enable direct content retrieval using a Package URL (PURL),
+- A system to store versioned metadata as structured text (JSON, YAML) in multiple Git repositories
+  to enable direct content retrieval using a Package URL (PURL),
 - A series of utilities to synchronize AboutCode databases with these versioned metadata, and
 - A system to publish package-centric events such as the release of a new package version, the
   publication of a vulnerability, the availability of detail scans, analysis and SBOMs using
